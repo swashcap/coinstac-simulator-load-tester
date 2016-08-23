@@ -24,8 +24,7 @@
   "homepage": "https://github.com/swashcap/coinstac-simulator-load-tester#readme",
   "dependencies": {
     "coinstac-simulator": "^2.0.5",
-    "concat-stream": "^1.5.1",
-    "funny-versions": "0.0.1"
+    "concat-stream": "^1.5.1"
   },
   "private": true
 }
