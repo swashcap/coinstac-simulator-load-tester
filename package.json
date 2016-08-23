@@ -1,0 +1,28 @@
+{
+  "name": "coinstac-simulator-load-tester",
+  "version": "1.0.0",
+  "description": "Test loads on coinstac-simulator.",
+  "main": "index.js",
+  "scripts": {
+    "start": "coinstac-simulator --declaration index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swashcap/coinstac-simulator-load-tester.git"
+  },
+  "keywords": [
+    "coinstac",
+    "load"
+  ],
+  "author": "Cory Reed <swashcap@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/swashcap/coinstac-simulator-load-tester/issues"
+  },
+  "homepage": "https://github.com/swashcap/coinstac-simulator-load-tester#readme",
+  "dependencies": {
+    "coinstac-simulator": "^2.0.5",
+    "funny-versions": "0.0.1"
+  },
+  "private": true
+}
