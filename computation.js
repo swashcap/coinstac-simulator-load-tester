@@ -6,9 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const pkg = require('./package.json');
 
-console.log('computation.js');
-
-
 module.exports = {
   local: {
     /**
