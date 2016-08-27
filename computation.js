@@ -3,10 +3,14 @@
 const concatStream = require('concat-stream');
 const crypto = require('crypto');
 const fs = require('fs');
+const parseNumber = require('./parse-number');
 const path = require('path');
 const pkg = require('./package.json');
 
-const MAX_ITERATIONS = 20;
+const iterationCount = parseNumber(
+  fs.readFileSync(path.join(__dirname, '.tmp', 'iterationCount')).toString()
+);
+const randomBytesPath = path.join(__dirname, '.tmp', 'randomBytes');
 
 module.exports = {
   local: {
@@ -22,7 +26,7 @@ module.exports = {
     fn: params => {
       return new Promise((resolve, reject) => {
         const hasher = crypto.createHash('sha256');
-        const reader = fs.createReadStream(path.join(__dirname, 'randomBytes'));
+        const reader = fs.createReadStream(randomBytesPath);
         const start = Date.now();
         reader.on('error', reject);
         reader.pipe(hasher).pipe(concatStream(hash => {
@@ -77,17 +81,18 @@ module.exports = {
       result.iteration++;
 
       // Mark pipeline step as 'complete' max iterations:
-      if (result.iteration >= MAX_ITERATIONS) {
+      if (result.iteration >= iterationCount) {
         result.complete = true;
 
         const averageLocalTime = Math.round(
-          result.localTimes.reduce((total, localTime) => total += localTime) /
+          result.localTimes.reduce((total, localTime) => total + localTime) /
           result.localTimes.length
         );
         const time = Date.now() - result.start;
 
-        console.log(`${MAX_ITERATIONS} iterations complete in ${time}ms`);
+        console.log(`${iterationCount} iterations complete in ${time}ms`);
         console.log(`Average client time: ${averageLocalTime}ms`);
+        console.log(`Client count: ${params.usernames.length}`);
       }
 
       return result;

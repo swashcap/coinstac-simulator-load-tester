@@ -4,9 +4,7 @@
   "description": "Test loads on coinstac-simulator.",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test:setup && coinstac-simulator -d index.js && npm run test:teardown",
-    "test:setup": "mkfile -n 1m randomBytes",
-    "test:teardown": "rm randomBytes"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +22,11 @@
   "homepage": "https://github.com/swashcap/coinstac-simulator-load-tester#readme",
   "dependencies": {
     "coinstac-simulator": "^2.0.5",
-    "concat-stream": "^1.5.1"
+    "commander": "^2.9.0",
+    "concat-stream": "^1.5.1",
+    "mkdirp": "^0.5.1",
+    "pify": "^2.3.0",
+    "rimraf": "^2.5.4"
   },
   "private": true
 }
