@@ -1,6 +1,7 @@
 'use strict';
 
 const coinstacSimulator = require('coinstac-simulator');
+const constants = require('./constants.json');
 const cp = require('child_process');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
@@ -11,66 +12,40 @@ const pkg = require('./package.json');
 const program = require('commander');
 const rimraf = require('rimraf');
 
-const DEFAULT_CLIENTS = 3;
-const DEFAULT_ITERATIONS = 10;
-
-const declaration = {
-  computationPath: path.join(__dirname, 'computation.js'),
-  verbose: true,
-  users: null,
-};
 const tmpPath = path.join(__dirname, '.tmp');
 
-let clientCount;
-let iterationCount;
-
-if (require.main === module) {
-  program
-    .version(pkg.version)
-    .description(pkg.description)
-    .option(
-      '-c, --clients [value]',
-      'Number of clients',
-      parseNumber,
-      DEFAULT_CLIENTS)
-    .option(
-      '-i, --iterations [value]',
-      'Number of computation iterations',
-      parseNumber,
-      DEFAULT_ITERATIONS
-    )
-    .parse(process.argv);
-
-  clientCount = program.clients;
-  iterationCount = program.iterations;
-} else {
-  clientCount = DEFAULT_CLIENTS;
-  iterationCount = DEFAULT_ITERATIONS;
+function cleanup() {
+  return pify(rimraf)(tmpPath);
 }
 
-declaration.users = [];
+program
+  .version(pkg.version)
+  .description(pkg.description)
+  .option(
+    '-c, --clients [value]',
+    'Number of clients',
+    parseNumber,
+    constants.DEFAULT_CLIENT_COUNT)
+  .option(
+    '-i, --iterations [value]',
+    'Number of computation iterations',
+    parseNumber,
+    constants.DEFAULT_ITERATION_COUNT
+  )
+  .parse(process.argv);
 
-for (let i = 0; i < clientCount; i++) {
-  declaration.users.push({
-    username: `loadTestUser${i}`,
-    userData: null,
-  });
-}
-
-pify(rimraf)(tmpPath)
+cleanup()
   .then(() => pify(mkdirp)(tmpPath))
   .then(() => {
     const writeFile = pify(fs.writeFile);
-    const declarationPath = path.join(tmpPath, 'declaration.json');
 
     return Promise.all([
-      declarationPath,
-      writeFile(declarationPath, JSON.stringify(declaration, null, 2)),
-      writeFile(path.join(tmpPath, 'iterationCount'), iterationCount),
+      writeFile(path.join(tmpPath, 'clientCount'), program.clients),
+      writeFile(path.join(tmpPath, 'iterationCount'), program.iterations),
       pify(cp.exec)(`mkfile -n 1m ${path.join(tmpPath, 'randomBytes')}`),
     ]);
   })
-  .then(([declarationPath]) => coinstacSimulator.run(declarationPath));
-
-module.exports = declaration;
+  .then(() => coinstacSimulator.run(path.join(__dirname, 'declaration.js')))
+  .then(cleanup)
+  .catch(error => console.error(error));
 

@@ -1,16 +1,23 @@
 'use strict';
 
 const concatStream = require('concat-stream');
+const constants = require('./constants.json');
 const crypto = require('crypto');
 const fs = require('fs');
 const parseNumber = require('./parse-number');
 const path = require('path');
 const pkg = require('./package.json');
 
-const iterationCount = parseNumber(
-  fs.readFileSync(path.join(__dirname, '.tmp', 'iterationCount')).toString()
-);
 const randomBytesPath = path.join(__dirname, '.tmp', 'randomBytes');
+let iterationCount;
+
+try {
+  iterationCount = parseNumber(
+    fs.readFileSync(path.join(__dirname, '.tmp', 'iterationCount')).toString()
+  );
+} catch (error) {
+  iterationCount = constants.DEFAULT_ITERATION_COUNT;
+}
 
 module.exports = {
   local: {
