@@ -2,9 +2,12 @@
   "name": "coinstac-simulator-load-tester",
   "version": "1.0.0",
   "description": "Test loads on coinstac-simulator.",
-  "main": "index.js",
+  "main": "./src/index.js",
+  "bin": {
+    "coinstac-simulator-load-tester": "./src/index.js"
+  },
   "scripts": {
-    "start": "coinstac-simulator -d declaration.js"
+    "start": "coinstac-simulator -d ./src/declaration.js"
   },
   "repository": {
     "type": "git",
@@ -12,7 +15,9 @@
   },
   "keywords": [
     "coinstac",
-    "load"
+    "coinstac simulator",
+    "load",
+    "testing"
   ],
   "author": "Cory Reed <swashcap@gmail.com>",
   "license": "MIT",

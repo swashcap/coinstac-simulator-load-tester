@@ -8,11 +8,11 @@ const mkdirp = require('mkdirp');
 const parseNumber = require('./parse-number');
 const path = require('path');
 const pify = require('pify');
-const pkg = require('./package.json');
+const pkg = require('../package.json');
 const program = require('commander');
 const rimraf = require('rimraf');
 
-const tmpPath = path.join(__dirname, '.tmp');
+const tmpPath = path.join(__dirname, '..', '.tmp');
 
 function cleanup() {
   return pify(rimraf)(tmpPath);

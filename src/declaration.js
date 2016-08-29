@@ -8,9 +8,9 @@ const path = require('path');
 let clientCount;
 
 try {
-  clientCount = parseNumber(
-    fs.readFileSync(path.join(__dirname, '.tmp', 'clientCount')).toString()
-  );
+  clientCount = parseNumber(fs.readFileSync(
+    path.join(__dirname, '..', '.tmp', 'clientCount')
+  ).toString());
 } catch (error) {
   clientCount = constants.DEFAULT_CLIENT_COUNT;
 }

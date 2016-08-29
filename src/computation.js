@@ -6,14 +6,14 @@ const crypto = require('crypto');
 const fs = require('fs');
 const parseNumber = require('./parse-number');
 const path = require('path');
-const pkg = require('./package.json');
+const pkg = require('../package.json');
 
-const randomBytesPath = path.join(__dirname, '.tmp', 'randomBytes');
+const tmpPath = path.join(__dirname, '..', '.tmp');
 let iterationCount;
 
 try {
   iterationCount = parseNumber(
-    fs.readFileSync(path.join(__dirname, '.tmp', 'iterationCount')).toString()
+    fs.readFileSync(path.join(tmpPath, 'iterationCount')).toString()
   );
 } catch (error) {
   iterationCount = constants.DEFAULT_ITERATION_COUNT;
@@ -33,7 +33,7 @@ module.exports = {
     fn: params => {
       return new Promise((resolve, reject) => {
         const hasher = crypto.createHash('sha256');
-        const reader = fs.createReadStream(randomBytesPath);
+        const reader = fs.createReadStream(path.join(tmpPath, 'randomBytes'));
         const start = Date.now();
         reader.on('error', reject);
         reader.pipe(hasher).pipe(concatStream(hash => {
