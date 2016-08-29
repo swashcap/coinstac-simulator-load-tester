@@ -14,9 +14,7 @@ const rimraf = require('rimraf');
 
 const tmpPath = path.join(__dirname, '..', '.tmp');
 
-function cleanup() {
-  return pify(rimraf)(tmpPath);
-}
+process.on('exit', () => rimraf.sync(tmpPath));
 
 program
   .version(pkg.version)
@@ -34,7 +32,7 @@ program
   )
   .parse(process.argv);
 
-cleanup()
+pify(rimraf)(tmpPath)
   .then(() => pify(mkdirp)(tmpPath))
   .then(() => {
     const writeFile = pify(fs.writeFile);
@@ -46,6 +44,5 @@ cleanup()
     ]);
   })
   .then(() => coinstacSimulator.run(path.join(__dirname, 'declaration.js')))
-  .then(cleanup)
   .catch(error => console.error(error));
 
