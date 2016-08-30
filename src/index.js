@@ -2,10 +2,9 @@
 
 const coinstacSimulator = require('coinstac-simulator');
 const constants = require('./constants.json');
-const cp = require('child_process');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
-const parseNumber = require('./parse-number');
+const { parseNumber, writeRandomBytes } = require('./utils');
 const path = require('path');
 const pify = require('pify');
 const pkg = require('../package.json');
@@ -14,7 +13,7 @@ const rimraf = require('rimraf');
 
 const tmpPath = path.join(__dirname, '..', '.tmp');
 
-process.on('exit', () => rimraf.sync(tmpPath));
+// process.on('exit', () => rimraf.sync(tmpPath));
 
 program
   .version(pkg.version)
@@ -40,7 +39,7 @@ pify(rimraf)(tmpPath)
     return Promise.all([
       writeFile(path.join(tmpPath, 'clientCount'), program.clients),
       writeFile(path.join(tmpPath, 'iterationCount'), program.iterations),
-      pify(cp.exec)(`mkfile -n 1m ${path.join(tmpPath, 'randomBytes')}`),
+      writeRandomBytes(path.join(tmpPath, 'randomBytes'), 1024 * 1024),
     ]);
   })
   .then(() => coinstacSimulator.run(path.join(__dirname, 'declaration.js')))

@@ -4,7 +4,7 @@ const concatStream = require('concat-stream');
 const constants = require('./constants.json');
 const crypto = require('crypto');
 const fs = require('fs');
-const parseNumber = require('./parse-number');
+const { parseNumber } = require('./utils');
 const path = require('path');
 const pkg = require('../package.json');
 

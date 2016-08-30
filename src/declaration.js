@@ -2,7 +2,7 @@
 
 const constants = require('./constants.json');
 const fs = require('fs');
-const parseNumber = require('./parse-number');
+const { parseNumber } = require('./utils');
 const path = require('path');
 
 let clientCount;
