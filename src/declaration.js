@@ -15,18 +15,9 @@ try {
   clientCount = constants.DEFAULT_CLIENT_COUNT;
 }
 
-const users = [];
-
-for (let i = 0; i < clientCount; i++) {
-  users.push({
-    username: `loadTestUser${i}`,
-    userData: null,
-  });
-}
-
 module.exports = {
   computationPath: path.join(__dirname, 'computation.js'),
+  local: new Array(clientCount),
   verbose: true,
-  users,
 };
 
